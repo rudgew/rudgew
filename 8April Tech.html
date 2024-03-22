@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Montserrat, sans-serif;
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Altura da tela inteira */
+            margin: 0; /* Remover margens padrão */
+            padding: 0; /* Remover preenchimentos padrão */
+        }
+
+        header {
+            text-align: center; /* Centralizar o texto do cabeçalho */
+        }
+
+        iframe {
+            width: 100%;
+            height: 1000vh;
+            border-left: none;
+            display: none;
+        }
+
+        .logo {
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style-type: none; /* Remover os marcadores da lista */
+            padding: 0; /* Remover preenchimento padrão */
+            margin: 0; /* Remover margens padrão */
+            text-align: center; /* Centralizar itens da lista */
+        }
+
+        nav ul li {
+            display: inline-block; /* Exibir os itens da lista em linha */
+            margin-right: 20px; /* Adicionar espaçamento entre os itens */
+        }
+
+        nav ul li a {
+            text-decoration: none; /* Remover decoração de link */
+            color: black; /* Definir a cor do texto do link */
+            font-weight: bold; /* Definir a fonte negrito */
+            font-size: 18px; /* Definir o tamanho da fonte */
+        }
+
+        footer {
+            text-align: center; /* Centralizar o texto do rodapé */
+            margin-top: auto; /* Colocar o rodapé no final da página */
+            padding: 20px 0; /* Adicionar preenchimento ao rodapé */
+            width: 100%; /* Ocupar a largura total da página */
+            background-color: #f2f2f2; /* Cor de fundo do rodapé */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://i.ibb.co/1XbmL2H/8april-1.png" alt="Logo da 8April Tech" class="logo">
+        <h1>Bem-vindo à 8April Tech!</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="C:\Users\rudge.paiva\Desktop\8April Tech.html">Home</a></li>
+            <li><a href="C:\Users\rudge.paiva\Desktop\Rudge\8April Tech\8April Software\cadastro.html" onclick="mostrarCadastro()">Cadastro de OS</a></li>
+            <li><a href="C:\Users\rudge.paiva\Desktop\Rudge\8April Tech\8April Software\visualizacao.html" onclick="mostrarVisualizacao()">OS Cadastradas</a></li>
+        </ul>
+    </nav>
+    
+    <footer>
+        <p>&copy; 2024 | 8April Tech | Todos os direitos reservados.</p>
+    </footer>
+
+    <iframe id="cadastroFrame" src="" frameborder="0"></iframe>
+    <iframe id="visualizacaoFrame" src="" frameborder="0"></iframe>
+
+    <script>
+        function mostrarCadastro() {
+            var cadastroFrame = document.getElementById("cadastroFrame");
+            var visualizacaoFrame = document.getElementById("visualizacaoFrame");
+            cadastroFrame.style.display = "block";
+            visualizacaoFrame.style.display = "none";
+        }
+
+        function mostrarVisualizacao() {
+            var cadastroFrame = document.getElementById("cadastroFrame");
+            var visualizacaoFrame = document.getElementById("visualizacaoFrame");
+            visualizacaoFrame.style.display = "block";
+            cadastroFrame.style.display = "none";
+        }
+    </script>
+</body>
+</html>

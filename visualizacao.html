@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços Realizados</title>
+    <style>
+        body {
+            font-family: Montserrat, sans-serif;
+            margin: 50px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .export-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+        .home-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body onload="showData()">
+    <h2>Serviços Realizados</h2>
+    <button class="export-btn" onclick="exportToCSV()">Exportar para CSV</button>
+    <button class="export-btn" onclick="exportToExcel()">Exportar para Excel</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Endereço</th>
+                <th>Telefone</th>
+                <th>Cidade</th>
+                <th>Data de Entrega</th>
+                <th>Serviço</th>
+                <th>Valor</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="cadastrosBody">
+            <!-- Os dados serão inseridos aqui via JavaScript -->
+        </tbody>
+    </table>
+    
+    <div>
+        <button id="prevPage" onclick="prevPage()">Página Anterior</button>
+        <span id="currentPage">Página 1</span>
+        <button id="nextPage" onclick="nextPage()">Próxima Página</button>
+    </div>
+
+    <a href="C:\Users\rudge.paiva\Desktop\8April Tech.html" class="home-btn">Voltar à Home</a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+    <script>
+        let currentPage = 1;
+        const entriesPerPage = 100;
+
+        function showData() {
+            const tableBody = document.getElementById('cadastrosBody');
+            tableBody.innerHTML = '';
+
+            let database = JSON.parse(localStorage.getItem('cadastroData')) || [];
+
+            // Ordenar o array pelo campo de data de entrega
+            database.sort((a, b) => new Date(a["Data de Entrega"]) - new Date(b["Data de Entrega"]));
+
+            const startIndex = (currentPage - 1) * entriesPerPage;
+            const endIndex = startIndex + entriesPerPage;
+            const entriesToShow = database.slice(startIndex, endIndex);
+
+            entriesToShow.forEach((item, index) => {
+                const row = document.createElement('tr');
+                for (const key in item) {
+                    if (item.hasOwnProperty(key)) {
+                        const cell = document.createElement('td');
+                        cell.textContent = item[key];
+                        row.appendChild(cell);
+                    }
+                }
+
+                const deleteCell = document.createElement('td');
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Excluir';
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.onclick = () => deleteEntry(index + startIndex);
+                deleteCell.appendChild(deleteBtn);
+                row.appendChild(deleteCell);
+
+                tableBody.appendChild(row);
+            });
+
+            updatePageInfo();
+        }
+
+        function deleteEntry(index) {
+            let database = JSON.parse(localStorage.getItem('cadastroData')) || [];
+            database.splice(index, 1);
+            localStorage.setItem('cadastroData', JSON.stringify(database));
+            showData();
+        }
+
+        function exportToCSV() {
+            const database = JSON.parse(localStorage.getItem('cadastroData')) || [];
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + Object.keys(database[0]).join(",") 
+                + "\n" + database.map(entry => Object.values(entry).join(",")).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "cadastros.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+
+        function exportToExcel() {
+            const database = JSON.parse(localStorage.getItem('cadastroData')) || [];
+            const worksheet = XLSX.utils.json_to_sheet(database);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Cadastros');
+            XLSX.writeFile(workbook, 'cadastros.xlsx');
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showData();
+            }
+        }
+
+        function nextPage() {
+            const database = JSON.parse(localStorage.getItem('cadastroData')) || [];
+            const totalPages = Math.ceil(database.length / entriesPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                showData();
+            }
+        }
+
+        function updatePageInfo() {
+            const database = JSON.parse(localStorage.getItem('cadastroData')) || [];
+            const totalPages = Math.ceil(database.length / entriesPerPage);
+            document.getElementById('currentPage').textContent = `Página ${currentPage} de ${totalPages}`;
+        }
+    </script>
+</body>
+</html>
